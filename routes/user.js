@@ -18,7 +18,7 @@ router.put("/:id", verifyTokenAuthorisation, async (req, res) => {
             },
             { new: true }
         );
-        res.status(200).json(updatedUser)
+        res.status(200).json({ stsatus: 200, data: { updatedUser } })
     } catch (err) {
         res.status(500).json(err);
     }
@@ -28,7 +28,7 @@ router.put("/:id", verifyTokenAuthorisation, async (req, res) => {
 router.delete("/:id", verifyTokenAuthorisation, async (req, res) => {
     try {
         await User.findByIdAndDelete(req.params.id);
-        res.status(200).json("User deleted!");
+        res.status(200).json({ stsatus: 200, msg: "User deleted!" });
     } catch (err) {
         res.status(401).json(err);
     }
@@ -39,7 +39,7 @@ router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         const { password, ...others } = user._doc;
-        res.status(200).json({ ...others });
+        res.status(200).json({ stsatus: 200, data: { ...others } });
     } catch (err) {
         res.status(401).json(err);
     }
@@ -52,10 +52,10 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
         const user = query ?
             await User.find().sort({ _id: -1 }).limit(5)
             : await User.find();
-        res.status(200).json({ user });
+        res.status(200).json({ stsatus: 200, data: { user } });
     } catch (err) {
         res.status(401).json(err);
     }
 });
 
-module.exports = router
+module.exports = router;

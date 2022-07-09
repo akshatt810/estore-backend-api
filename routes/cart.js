@@ -7,7 +7,7 @@ router.post("/", verifyTokenAndAdmin, async (req, res) => {
     const newCart = new Cart(req.body);
     try {
         const savedCart = await newCart.save();
-        res.status(201).json(savedCart);
+        res.status(201).json({ stsatus: 200, savedCart });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -23,7 +23,7 @@ router.put("/:id", verifyTokenAuthorisation, async (req, res) => {
             },
             { new: true }
         );
-        res.status(200).json(updatedCart)
+        res.status(200).json({ stsatus: 200, updatedCart })
     } catch (err) {
         res.status(500).json(err);
     }
@@ -33,7 +33,7 @@ router.put("/:id", verifyTokenAuthorisation, async (req, res) => {
 router.delete("/:id", verifyTokenAuthorisation, async (req, res) => {
     try {
         await Cart.findByIdAndDelete(req.params.id);
-        res.status(200).json("PRoduct rmoved from your cart!");
+        res.status(200).json({ stsatus: 200, msg: "PRoduct rmoved from your cart!" });
     } catch (err) {
         res.status(401).json(err);
     }
@@ -43,7 +43,7 @@ router.delete("/:id", verifyTokenAuthorisation, async (req, res) => {
 router.get("/find/:userId", verifyTokenAuthorisation, async (req, res) => {
     try {
         const Cart = await Cart.findOne(req.params.userId);
-        res.status(200).json(Cart);
+        res.status(200).json({ stsatus: 200, Cart });
     } catch (err) {
         res.status(401).json(err);
     }
@@ -53,7 +53,7 @@ router.get("/find/:userId", verifyTokenAuthorisation, async (req, res) => {
 router.get("/", verifyTokenAndAdmin, async (req, res) => {
     try {
         const carts = await Cart.find();
-        res.status(200).json(Carts);
+        res.status(200).json({ stsatus: 200, Carts });
     } catch (err) {
         res.status(500).json(err);
     }

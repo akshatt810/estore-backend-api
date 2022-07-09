@@ -16,7 +16,7 @@ router.post("/register", async (req, res) => {
 
     try {
         const savedUser = await newUser.save();
-        res.status(201).json(savedUser);
+        res.status(201).json({ status: 200, data: { savedUser } });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -48,7 +48,7 @@ router.post("/login", async (req, res) => {
                     { expiresIn: '3d', }
                 );
 
-                res.status(200).json({ ...others, accessToken });
+                res.status(200).json({ stsatus: 200, data: { ...others, accessToken } });
             }
         }
     } catch (err) {

@@ -7,7 +7,7 @@ router.post("/", verifyTokenAndAdmin, async (req, res) => {
     const newProduct = new Product(req.body);
     try {
         const savedProduct = await newProduct.save();
-        res.status(201).json(savedProduct);
+        res.status(201).json({ stsatus: 200, savedProduct });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -23,7 +23,7 @@ router.put("/:id", verifyTokenAuthorisation, async (req, res) => {
             },
             { new: true }
         );
-        res.status(200).json(updatedProduct)
+        res.status(200).json({ stsatus: 200, updatedProduct })
     } catch (err) {
         res.status(500).json(err);
     }
@@ -34,24 +34,24 @@ router.put("/:id", verifyTokenAuthorisation, async (req, res) => {
 router.delete("/:id", verifyTokenAuthorisation, async (req, res) => {
     try {
         await Product.findByIdAndDelete(req.params.id);
-        res.status(200).json("Product deleted!");
+        res.status(200).json({ stsatus: 200, msg: "Product deleted!" });
     } catch (err) {
         res.status(401).json(err);
     }
 });
 
 //GET PRODUCT 
-router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
+router.get("/find/:id", async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
-        res.status(200).json(product);
+        res.status(200).json({ stsatus: 200, product });
     } catch (err) {
         res.status(401).json(err);
     }
 });
 
 //GET ALL PRoDUCTS 
-router.get("/", verifyTokenAndAdmin, async (req, res) => {
+router.get("/", async (req, res) => {
     try {
         const qNew = req.query.new;
         const qCategory = req.query.category;
