@@ -10,7 +10,7 @@ router.post("/register", async (req, res) => {
         email: req.body.email,
         password: CryptoJS.AES.encrypt(
             req.body.password,
-            process.env.PASS_SEC
+            process.env.PASS_SEC || "KEY required!"
         ).toString()
     });
 
@@ -31,20 +31,20 @@ router.post("/login", async (req, res) => {
         else {
             const hashedPass = CryptoJS.AES.decrypt(
                 user.password,
-                process.env.PASS_SEC
+                process.env.PASS_SEC || "KEY required!"
             );
             const pwd = hashedPass.toString(CryptoJS.enc.Utf8);
             if (pwd !== req.body.password) res.status(401).json("Wrong Credentials!");
             else {
                 const { password, ...others } = user._doc;
 
-                console.log(user._id, user.isAdmin, process.env.JWT_SEC)
+                console.log(user._id, user.isAdmin, process.env.JWT_SEC || "KEY required!")
                 const accessToken = jwt.sign(
                     {
                         id: user._id,
                         isAdmin: user.isAdmin,
                     },
-                    process.env.JWT_SEC,
+                    process.env.JWT_SEC || "KEY required!",
                     { expiresIn: '3d', }
                 );
 

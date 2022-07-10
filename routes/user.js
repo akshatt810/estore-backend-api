@@ -7,7 +7,7 @@ router.put("/:id", verifyTokenAuthorisation, async (req, res) => {
     if (req.body.password) {
         req.body.password = CryptoJS.AES.encrypt(
             req.bodu.password,
-            process.env.PASS_SEC
+            process.env.PASS_SEC || "KEY required!"
         ).toString();
     }
     try {

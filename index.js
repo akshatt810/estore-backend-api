@@ -6,7 +6,8 @@ const userRoutes = require("./routes/user");
 const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/product");
 const cartRoutes = require("./routes/cart")
-const orderRoutes = require("./routes/order")
+const orderRoutes = require("./routes/order");
+const cors = require("cors");
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ mongoose.connect(process.env.MONGO_URL
     });
 
 app.use(express.json());
+app.use(cors);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
@@ -27,6 +29,6 @@ app.use("/api/orders", orderRoutes);
 //     console.log("test is successfull");
 // });
 
-app.listen(process.env.port || 5000, () => {
+app.listen(process.env.PORT || 5000, () => {
     console.log("Backend Server is running!");
 })
