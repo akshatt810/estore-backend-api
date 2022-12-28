@@ -5,6 +5,25 @@ const jwt = require("jsonwebtoken");
 
 //Register
 router.post("/register", async (req, res) => {
+    if (!req.body.username) {
+        return res.status(401).json("Username Field Is Required.");
+    }
+    if (!req.body.email) {
+        return res.status(401).json("Email Field Is Required.");
+    }
+    if (!req.body.password) {
+        return res.status(401).json("Password Field Is Required.");
+    }
+
+    let user = await User.findOne({ email: req.body.email });
+    if (user != null)
+        return res.status(200).json("Email Already Registered.");
+
+    user = await User.findOne({ username: req.body.username });
+    if (user != null) {
+        return res.status(200).json("Username Already Registered. Please Enter Different Username.");
+    }
+
     const newUser = new User({
         username: req.body.username,
         email: req.body.email,
@@ -16,18 +35,27 @@ router.post("/register", async (req, res) => {
 
     try {
         const savedUser = await newUser.save();
-        res.status(201).json({ status: 200, data: { savedUser } });
+        return res.status(201).json({ status: 200, data: { savedUser } });
     } catch (err) {
-        res.status(500).json(err);
+        return res.status(500).json(err);
     }
-})
+});
 
 //login
 router.post("/login", async (req, res) => {
     try {
+
+        if (!req.body.username)
+            return res.status(401).json("Username Field Is Required.");
+
+        if (!req.body.password)
+            return res.status(401).json("Password Field Is Required.");
+
         const user = await User.findOne({ username: req.body.username });
 
-        if (!user) res.status(401).json("Wrong Credentials");
+        if (!user) {
+            return res.status(401).json("Wrong Credentials");
+        }
         else {
             const hashedPass = CryptoJS.AES.decrypt(
                 user.password,
@@ -38,7 +66,6 @@ router.post("/login", async (req, res) => {
             else {
                 const { password, ...others } = user._doc;
 
-                console.log(user._id, user.isAdmin, process.env.JWT_SEC || "KEY required!")
                 const accessToken = jwt.sign(
                     {
                         id: user._id,
@@ -48,12 +75,12 @@ router.post("/login", async (req, res) => {
                     { expiresIn: '3d', }
                 );
 
-                res.status(200).json({ stsatus: 200, data: { ...others, accessToken } });
+                return res.status(200).json({ stsatus: 200, data: { ...others, accessToken } });
             }
         }
     } catch (err) {
-        res.status(500).json(err);
         console.log(err);
+        return res.status(500).json(err);
     }
 })
 

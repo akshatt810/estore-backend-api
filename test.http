@@ -2,11 +2,19 @@ post http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-    "username" : "akhsatt810",
-    "email" : "test@test.test",
-    "password": "password"
+    "username" : "akshatt8100",
+    "email" : "test@test.test1",
+    "password": "akshatt810@"
 }
 
+###
+post http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "username" : "akshatt810",
+    "password": "akshatt810@"
+}
 
 ###
-get http://localhost:5000/api/test
+get http://localhost:5000/
